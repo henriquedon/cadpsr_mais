@@ -2,7 +2,16 @@
 
 ## Sobre
 
+Software construído para fins acadêmicos.
+
 Prova de conceito desenvolvida com a finalidade de simular a integração do Cadastro de Pessoas em situação de rua no Brasil, conforme o tema norteador do Projeto Integrador 2 (1ºSEM/2022). Este software se baseia em: framework web; banco de dados; uso de APIS; script web; nuvem; acessibilidade; testes; e sistema de controle de versão. E implementa novas funcionalidades e melhorias, a partir da refatoração de código de aplicação web construída em Projeto Integrador anterior.
+
+
+## Créditos de uso de mídia e componente de Terceiros
+
+- Na página de login, o formulário contendo usuário, senha e botão de enviar baseia-se no modelo disponibilizado por Material Design for Bootstrap. Disponível em: https://mdbootstrap.com/docs/standard/extended/login/#!
+
+- Na página index é utiliza uma fotografia de autori de Clay Banks (@claybanks - Unsplash), disponível em: https://unsplash.com/photos/LjqARJaJotc
 
 
 ## Tecnologias Utilizadas
