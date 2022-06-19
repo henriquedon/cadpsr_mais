@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="container">
+    <section>
+    <div class="row">
+        <div class="col-sm-10">
+            <h1>Pessoas</h1>
+        </div>
+        <div class="col-sm-2 text-end">
+            <a class="btn btn-outline-primary" href="/novo_psr" role="button">Novo Cadastro</a>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row">
+        <div class="col-sm-9">
+            <small>
+                <em><strong>Referenciadas para entidade:</strong> {{ total_pessoas_entidade }}</em>
+            </small>
+        </div>
+        <div class="col-sm-3">
+            <small>
+                <em><strong>Cadastradas no CadPSR+:</strong> {{ total_pessoas_cadpsr }}</em>
+            </small>
+        </div>
+    </div>
+
+    <br>
+
+    <h2><em>Consulta de Pessoas</em></h2>
+
+    <br>
+
+        <form method="POST">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="tipo_de_consulta"> Tipo de Consulta:</label>
+                    <select class="form-select" name="tipo_de_consulta" id="tipo_de_consulta">
+                        <option value="ID" select>IDP</option>
+                        <option value="NOME">NOME</option>
+                        <option value="CPF">CPF</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <label for="dado_consultado">
+                        Informe o dado correspondente ao tipo de consulta desejada:
+                    </label>
+                    <input type="search" class="form-control"
+                        id="dado_consultado" name="dado_consultado"
+                        placeholder="Informe o dado a ser consultado..." autofocus>
+                </div>
+                <div class="col-sm-1">
+                    <div class="row">
+                        &nbsp;
+                    </div>
+                    <button type="submit" class="btn btn-outline-dark"
+                        aria-label="Botão para efetuar a consulta">Consultar</button>
+                </div>
+            </div>
+        </form>
+
+        <br>
+
+        {% if current_user.tipo_clb == '0' %}
+        <small>
+            <strong>ATALHO DE CONSULTA:</strong><br>
+            <em>
+                <strong>.t</strong> para todas PSR cadastradas no CadPSR+;
+            </em>
+        </small>
+        {% else %}
+        <small>
+            <strong>ATALHO DE CONSULTA:</strong><br>
+            <em>Informe <strong>.t</strong> para listar todas Pessoas referenciadas por sua Entidade.</em>
+        </small>
+        {% endif %}
+
+    <br>
+    <br>
+
+    <div>
+    {% if busca == True %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 8%">#</th>
+                <th style="width: 5%">STATUS</th>
+                <th style="width: 9%">ID</th>
+                <th style="width: 30%">NOME</th>
+                <th style="width: 15%">DATA NASC.</th>
+                <th style="width: 30%">REFERÊNCIA</th>
+                <th style="width: 3%">VISUALIZAR</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if pessoa %}
+            <tr>
+            <th scope="row">1</th>
+                <form class="" method="POST">
+                    <td>{{ pessoa.status }}</td>
+                    <td>{{ pessoa.id}}</td>
+                    <td>{{ pessoa.nome_civil}}</td>
+                    <td>{{ pessoa.data_nascimento[8:] }}/{{ pessoa.data_nascimento[5:7] }}/{{ pessoa.data_nascimento[0:4] }}</td>
+                    <td>{{ entidade_cad_dic['entidade'][pessoa.entidade_referencia] }}</td>
+                    <td>
+                        <a class="btn btn-link" href="/cadastro_psr/{{ pessoa.id }}"
+                            role="button">Abrir</a>
+                    </td>
+                </form>
+            </tr>
+            {% else %}
+            {% if dado_consultado == '.t' %}
+            {% for pessoa in pessoas %}
+            <tr>
+            <th scope="row">{{ loop.index }}</th>
+                <form class="" method="POST">
+                    <td>{{ pessoa.status }}</td>
+                    <td>{{ pessoa.id}}</td>
+                    <td>{{ pessoa.nome_civil}}</td>
+                    <td>{{ pessoa.data_nascimento[8:] }}/{{ pessoa.data_nascimento[5:7] }}/{{ pessoa.data_nascimento[0:4] }}</td>
+                    <td>{{ entidade_cad_dic['entidade'][pessoa.entidade_referencia] }}</td>
+                    <td>
+                        <a class="btn btn-link" href="/cadastro_psr/{{ pessoa.id }}"
+                            role="button">Abrir</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+            {% else %}
+            {% for pessoa in pessoas %}
+            <tr>
+            <th scope="row">{{ loop.index }}</th>
+                <form class="" method="POST">
+                    <td>{{ pessoa.status }}</td>
+                    <td>{{ pessoa.id}}</td>
+                    <td>{{ pessoa.nome_civil}}</td>
+                    <td>{{ nascimento }}</td>
+                    <td>{{ entidade_cad_dic['entidade'][pessoa.entidade_referencia] }}</td>
+                    <td>
+                        <a class="btn btn-link" href="/cadastro_psr/{{ pessoa.id }}"
+                            role="button">Abrir</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            {% endif %}
+    </tbody>
+    </table>
+    {% endif %}
+<br>
+</section>
+</main>
+{% endblock %}

@@ -1,0 +1,812 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container">
+    <form class="needs-validation" name="form_cadastro_pessoa"
+        id="form_cadastro_pessoa"
+        action="/persistencia_psr" method="POST" novalidate>
+        <div class="row">
+            <div class="col-sm-11">
+                <h1>{{ titulo_body_2 }}</h1>
+            </div>
+            <div class="col-sm-1">
+                <a class="btn btn-outline-dark" href="\pessoas"
+                    role="button">&nbsp;Voltar&nbsp</a>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-11">
+            </div>
+            <div class="col-sm-1 text-end">
+                <button type="submit" class="btn btn-outline-success"
+                    id="salvar" name="salvar"  value="">&nbsp;Salvar&nbsp</button>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="nome_civil">Nome Civil</label>
+                <input type="text" class="form-control"
+                    id="nome_civil" name="nome_civil"
+                    minlength="3" maxlength="60"
+                    placeholder="Informe o nome civil" required>
+                <div class="invalid-tooltip">
+                    Informe o nome civil (3 até 60 caracteres).
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="nome_social">Nome Social</label>
+                <input type="text" class="form-control"
+                    id="nome_social" name="nome_social"
+                    minlength="3" maxlength="60"
+                    placeholder="Informe o nome social">
+                <div class="invalid-tooltip">
+                    O campo nome social deve conter de 3 até 60 caracteres.
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="apelido">Apelido</label>
+                <input type="text" class="form-control" id="apelido"
+                    name="apelido" minlength="1" maxlength="60"
+                    placeholder="Informe o apelido">
+                <div class="invalid-tooltip">
+                    O campo apelido deve conter de 1 a 60 caracteres.
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="cpf">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf"
+                    minlength="11" maxlength="11"
+                    onkeypress="$(this).mask('000.000.000-00')"
+                    placeholder="000.000.000-00" required>
+                <div class="invalid-tooltip">
+                    Informe o CPF (11 dígitos).
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="data_nascimento">Data de Nascimento</label>
+                <input class="form-control" type="date" id="data_nascimento"
+                    name="data_nascimento" min="1921-01-01" max="2022-06-15" required>
+                    <div class="invalid-tooltip">
+                        Informe a data de nascimento.
+                    </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control"
+                    name="email" id="email" maxlength="60"
+                    placeholder="Informe o e-mail">
+                <div class="invalid-tooltip">
+                    Informe um e-mail válido (até 60 caracteres).
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="telefone">Telefone</label>
+                <input type="text" class="form-control" id="telefone"
+                    name="telefone" minlength="10" maxlength="10"
+                    onkeypress="$(this).mask('00 0000 0000')"
+                    placeholder="00 0000 0000">
+                <div class="invalid-tooltip">
+                    O campo telefone deve conter 10 dígitos com DDD incluso.
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="celular">Celular</label>
+                <input type="text" class="form-control" id="celular"
+                    name="celular" minlength="11" maxlength="11"
+                    onkeypress="$(this).mask('00 00000 0000')"
+                    placeholder="00 00000 0000">
+                <div class="invalid-tooltip">
+                    O campo celular deve conter 11 dígitos com DDD incluso.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="cidade_atual">Cidade atual</label>
+                <select class="form-select" name="cidade_atual" id="cidade_atual"
+                    {{ estado }} required>
+                    <option selected></option>
+                    {% for chave_cidade_atual in entidade_cad_dic['cidade'] %}
+                    <option value="{{ chave_cidade_atual }}">
+                        {{ entidade_cad_dic['cidade'][chave_cidade_atual] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-tooltip">
+                    Informe a cidade atual.
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="entidade_referencia">Entidade Referência</label>
+                <select class="form-select" name="entidade_referencia"
+                    id="entidade_referencia" required>
+                    <option selected></option>
+                    {% for chave_entidade_referencia in entidade_cad_dic['entidade'] %}
+                    {% if chave_entidade_referencia != '0' %}
+                    <option value="{{ chave_entidade_referencia }}">
+                        {{ entidade_cad_dic['entidade'][chave_entidade_referencia] }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="invalid-tooltip">
+                    Informe a Entidade Referência.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="etnia">Raça/Etnia</label>
+                <select class="form-select" name="etnia" id="etnia">
+                    <option selected></option>
+                    {% for chave_etnia in pessoa_cad_dic['etnia'] %}
+                    <option value="{{ chave_etnia }}">
+                        {{ pessoa_cad_dic['etnia'][chave_etnia] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="sexo">Sexo</label>
+                <select class="form-select" name="sexo" id="sexo">
+                    <option selected></option>
+                    {% for chave_sexo in pessoa_cad_dic['sexo'] %}
+                    <option value="{{ chave_sexo }}">
+                        {{ pessoa_cad_dic['sexo'][chave_sexo] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="orientacao_sexual">Orientação Sexual</label>
+                <select class="form-select"
+                    name="orientacao_sexual" id="orientacao_sexual">
+                    <option selected></option>
+                    {% for chave_orientacao_sexual in pessoa_cad_dic['orientacao_sexual'] %}
+                    <option value="{{ chave_orientacao_sexual }}">
+                        {{ pessoa_cad_dic['orientacao_sexual'][chave_orientacao_sexual] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="identidade_genero">Identidade de Gênero</label>
+                <select class="form-select"
+                    name="identidade_genero" id="identidade_genero">
+                    <option selected></option>
+                    {% for chave_identidade_genero in pessoa_cad_dic['identidade_genero'] %}
+                    <option value="{{ chave_identidade_genero }}">
+                        {{ pessoa_cad_dic['identidade_genero'][chave_identidade_genero] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <br>
+
+        <hr>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-3 position-relative">
+                <label for="rg">RG</label>
+                <input type="text" class="form-control"
+                    id="rg" name="rg" minlength="5" maxlength="9"
+                    onkeypress="$(this).mask('000 000 000')"
+                    placeholder="000 000 000">
+                <div class="invalid-tooltip">
+                    O campo RG deve conter de 5 a 9 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <label for="rg_dv">DV</label>
+                <input class="form-control" type="text"
+                    name="rg_dv" id="rg_dv" maxlength="1">
+            </div>
+            <div class="col-sm-2">
+                <label for="rg_uf">UF</label>
+                <select class="form-select" name="rg_uf" id="rg_uf">
+                    <option selected></option>
+                    {% for chave_uf in pessoa_cad_dic['uf'] %}
+                    <option value="{{ chave_uf }}">{{ pessoa_cad_dic['uf'][chave_uf] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="rg_emissao">Data de Emissão</label>
+                <input class="form-control" id="rg_emissao" type="date"
+                    name="rg_emissao" min="1921-01-01" max="2022-06-01">
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="rg_orgao_emissor">Órgão Emissor</label>
+                <input class="form-control" type="text"  id="rg_orgao_emissor"
+                    name="rg_orgao_emissor" minlength="2" maxlength="60"
+                    placeholder="Informe o órgão emissor">
+                <div class="invalid-tooltip">
+                    O campo Órgão Emissor deve conter de 2 a 60 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-3 position-relative">
+                <label for="titulo_eleitor">Título de Eleitor</label>
+                <input type="text" class="form-control" id="titulo_eleitor"
+                    name="titulo_eleitor" minlength="12" maxlength="12"
+                    onkeypress="$(this).mask('0000 0000 0000')"
+                    placeholder="0000 0000 0000">
+                <div class="invalid-tooltip">
+                    O campo Título de Eleitor deve conter 12 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="titulo_zona">Zona</label>
+                <input type="text" class="form-control" id="titulo_zona"
+                    name="titulo_zona" minlength="2" maxlength="6"
+                    placeholder="Informe a zona eleitoral">
+                <div class="invalid-tooltip">
+                    O campo Zona Eleitoral deve conter no máximo 6 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="titulo_secao">Seção</label>
+                <input type="text" class="form-control" id="titulo_secao"
+                    name="titulo_secao" minlength="2" maxlength="6"
+                    placeholder="Informe a seção eleitoral">
+                <div class="invalid-tooltip">
+                    O campo Seção Eleitoral deve conter no máximo 6 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label for="titulo_emissao">Data de Emissão</label>
+                <input class="form-control" id="titulo_emissao" type="date"
+                    name="titulo_emissao">
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-3 position-relative">
+                <label for="cns">CNS</label>
+                <input type="text" class="form-control" id="cns"
+                    name="cns" minlength="15" maxlength="15"
+                    onkeypress="$(this).mask('000 000 000 000 000')"
+                    placeholder="000 000 000 000 000">
+                <div class="invalid-tooltip">
+                    O campo CNS deve conter 15 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="nis">NIS</label>
+                <input type="text" class="form-control" id="nis"
+                    name="nis" minlength="12" maxlength="12"
+                    onkeypress="$(this).mask('0000 0000 0000')"
+                    placeholder="0000 0000 0000">
+                <div class="invalid-tooltip">
+                    O campo NIS deve conter 12 dígitos.
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="certidao_nascimento">Certidão de Nascimento</label>
+                <input type="text" class="form-control" id="certidao_nascimento"
+                    name="certidao_nascimento" minlength="32" maxlength="32"
+                    onkeypress="$(this).mask('0000 0000 0000 0000 0000 0000 0000 0000')"
+                    placeholder="0000 0000 0000 0000 0000 0000 0000 0000">
+                <div class="invalid-tooltip">
+                    O campo Certidão de Nascimento deve conter 32 dígitos.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="naturalidade">Naturalidade</label>
+                <input type="text" class="form-control"
+                    id="naturalidade" name="naturalidade"
+                    minlength="4" maxlength="60"
+                    placeholder="Informe a naturalidade">
+                <div class="invalid-tooltip">
+                    O campo Naturalidade deve conter de 4 a 60 caracteres.
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="nacionalidade">Nacionalidade</label>
+                <input type="text" class="form-control"
+                    id="nacionalidade" name="nacionalidade"
+                    minlength="4" maxlength="60"
+                    placeholder="Informe a nacionalidade">
+                <div class="invalid-tooltip">
+                    O campo Nacionalidade deve conter de 4 a 60 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <h2>QUESTIONÁRIO - PESSOA ESTRANGEIRA</h2>
+
+        <hr>
+
+        <fieldset>
+            <legend>
+                Está em situação de migração/refúgio?
+            </legend>
+            <br>
+            <br>
+            {% for chave_alternativa in questionario_pessoa_estrangeira['questao_1'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_migracao"
+                    id="questao_migracao_{{ chave_alternativa }}" value="{{ chave_alternativa }}">
+                <label class="form-check-label" for="questao_migracao_{{ chave_alternativa }}">
+                    {{ questionario_pessoa_estrangeira['questao_1'][chave_alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <h2>CARTEIRA DE REGISTRO NACIONAL MIGRATÓRIO (CRNM)</h2>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="crnm_rnm">RNM</label>
+                <input type="text" class="form-control"
+                    name="crnm_rnm" id="crnm_rnm"
+                    minlength="20" maxlength="20"
+                    onkeypress="$(this).mask('00000 00000 00000 00000')"
+                    placeholder="00000 00000 00000 00000">
+                <div class="invalid-tooltip">
+                    O campo RNM deve conter 20 caracteres.
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label for="crnm_emissao">Emissão</label>
+                <input class="form-control" id="crnm_emissao" name="crnm_emissao"
+                        type="date">
+            </div>
+            <div class="col-sm-3">
+                <label for="crnm_validade">Validade</label>
+                <input class="form-control" id="crnm_validade" type="date"
+                    name="crnm_validade">
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="crnm_filiacao_a">Filiação A</label>
+                <input type="text" class="form-control"
+                    name="crnm_filiacao_a" id="crnm_filiacao_a"
+                    minlength="8" maxlength="60"
+                    placeholder="Informe a filiação A">
+                <div class="invalid-tooltip">
+                    O campo Filiação A deve conter de 8 a 60 caracteres.
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="crnm_filiacao_b">Filiação B</label>
+                <input type="text" class="form-control"
+                    name="crnm_filiacao_b" id="crnm_filiacao_b"
+                    minlength="8" maxlength="60"
+                    placeholder="Informe a filiação">
+                <div class="invalid-tooltip">
+                    O campo Filiação B deve conter de 8 a 60 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="crnm_classificacao">Classificação</label>
+                <input type="text" class="form-control"
+                    name="crnm_classificacao" id="crnm_classificacao"
+                    minlength="4" maxlength="30"
+                    placeholder="Informe a classificação">
+                <div class="invalid-tooltip">
+                     O campo Classificação deve conter de 4 a 30 caracteres.
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="crnm_domicilio">Domicílio (Endereço)</label>
+                <input type="text" class="form-control"
+                    name="crnm_domicilio" id="crnm_domicilio"
+                    minlength="8" maxlength="100"
+                    placeholder="Informe o domicílio">
+                <div class="invalid-tooltip">
+                    O campo Domicílio deve conter de 8 a 100 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <h1>QUESTIONÁRIO GERAL 1</h1>
+
+        <hr>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    1) Onde costuma dormir? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_1'] %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                  name="questao_1" id="questao_1_{{ questionario['questao_1'][alternativa] }}" value="{{ alternativa }}">
+              <label class="form-check-label" for="questao_1_{{ questionario['questao_1'][alternativa] }}">
+                  {{ questionario['questao_1'][alternativa] }}
+              </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    2) Há quanto tempo vive na rua?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_2'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_2"
+                    id="questao_2_{{ questionario['questao_2'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_2_{{ questionario['questao_2'][alternativa] }}">
+                    {{ questionario['questao_2'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    3) Quais os principais motivos pelos quais passou a morar na rua / albergue / outro? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_3'] %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                  name="questao_3" id="questao_3_{{ questionario['questao_3'][alternativa] }}" value="{{ alternativa }}">
+              <label class="form-check-label" for="questao_3_{{ questionario['questao_3'][alternativa] }}">
+                  {{ questionario['questao_3'][alternativa] }}
+              </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                        4) Há quanto tempo mora na cidade atual?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_4'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_4"
+                    id="{{ questionario['questao_4'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="{{ questionario['questao_4'][alternativa] }}">
+                    {{ questionario['questao_4'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    5) Vive com sua família na rua?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_5'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_5"
+                    id="questao_5_{{ questionario['questao_5'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_5_{{ questionario['questao_5'][alternativa] }}">
+                    {{ questionario['questao_5'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    6) Tem contato com parente que viva fora na rua?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_6'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_6"
+                    id="questao_6_{{ questionario['questao_6'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_6_{{ questionario['questao_6'][alternativa] }}">
+                    {{ questionario['questao_6'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    7) Nos últimos 6 meses frequentou ou participou de alguma atividade comunitária? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_7'] %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                  name="questao_7" id="questao_7_{{ questionario['questao_7'][alternativa] }}" value="{{ alternativa }}">
+              <label class="form-check-label" for="questao_7_{{ questionario['questao_7'][alternativa] }}">
+                  {{ questionario['questao_7'][alternativa] }}
+              </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    8) Nos últimos 6 meses foi atendido em algum dos lugares listados abaixo? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_8'] %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                  name="questao_8" id="questao_8_{{ questionario['questao_8'][alternativa] }}" value="{{ alternativa }}">
+              <label class="form-check-label" for="questao_8_{{ questionario['questao_8'][alternativa] }}">
+                  {{ questionario['questao_8'][alternativa] }}
+              </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+        <div class="row">
+            <legend>
+                9) Alguma vez teve emprego com carteira de trabalho assinada?
+            </legend>
+        </div>
+        <br>
+        {% for alternativa in questionario['questao_9'] %}
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="questao_9"
+                id="questao_9_{{ questionario['questao_9'][alternativa] }}" value="{{ alternativa }}">
+            <label class="form-check-label" for="questao_9_{{ questionario['questao_9'][alternativa] }}">
+                {{ questionario['questao_9'][alternativa] }}
+            </label>
+        </div>
+        {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    10) O que faz para ganhar dinheiro? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_10'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                  name="questao_10" id="questao_10_{{ questionario['questao_10'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_10_{{ questionario['questao_10'][alternativa] }}">
+                  {{ questionario['questao_10'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+        <div class="row">
+            <legend>
+                11) Qual valor renda mensal?
+            </legend>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-1">
+                <label for="questao_11">R$</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="questao_11"
+                    name="questao_11"
+                    onkeypress="$(this).mask('000 000')"
+                    maxlength="6" placeholder="000 000">
+
+            </div>
+        </div>
+        </fieldset>
+
+        <br>
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    12) Quanto tempo faz que realizou exames médicos?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_12'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_12"
+                    id="questao_12_{{ questionario['questao_12'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_12_{{ questionario['questao_12'][alternativa] }}">
+                    {{ questionario['questao_12'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    13) Possui alguma deficiência? (admite múltipla marcação)
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_13'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                  name="questao_13" id="questao_13_{{ questionario['questao_13'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_13_{{ questionario['questao_13'][alternativa] }}">
+                  {{ questionario['questao_13'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset>
+            <div class="row">
+                <legend>
+                    14) Já foi vacinado contra Covid-19?
+                </legend>
+            </div>
+            <br>
+            {% for alternativa in questionario['questao_14'] %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="questao_14"
+                    id="questao_14_{{ questionario['questao_14'][alternativa] }}" value="{{ alternativa }}">
+                <label class="form-check-label" for="questao_14_{{ questionario['questao_14'][alternativa] }}">
+                    {{ questionario['questao_14'][alternativa] }}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col-sm-">
+                <label for="obs_psr"><strong><em>Observaçôes referentes ao cadastro (max 300 caracteres)</em></strong></label>
+            </div>
+        </div>
+        <div class="row">
+                <textarea class="form-control" name="obs_psr" id="obs_psr"
+                    rows="4" maxlength="300" {{ estado }}></textarea>
+        </div>
+    </form>
+
+    <br>
+
+    <div class="row">
+        <div class="col-sm-12 text-end">
+            <p> <a href="#">#Topo</a> </p>
+        </div>
+    </div>
+    <br>
+</main>
+<script src="../static/js/jquery-3.6.0.min.js"></script>
+<script src="../static/js/jquery.mask.min.js"></script>
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                      event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+          }, false)
+        })
+})()
+</script>
+{% endblock %}

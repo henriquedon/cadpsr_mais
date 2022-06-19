@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" >
+    <title>{{ titulo }}</title>
+</head>
+<body>
+    <main>
+        <section>
+            <h1><strong>CadPSR+</strong></h1>
+            <small><strong>ENTIDADE:</strong> {{ entidade_cad_dic['entidade'][entidade_nome].upper() }}</small>
+            <br>
+            <small><strong>PESSOA:</strong> {{ pessoa.nome_civil.upper() }}</small>
+            <br>
+            <small><strong>DATA DE IMPRESSÃO</strong> {{ data_impressao }}</small>
+        </section>
+
+            <br>
+
+        <section>
+            <table class="table table-sm">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><small><em><strong>Cadastro criado em:</strong> {{ formata_data(pessoa.data_criacao) }}</em></small></td>
+                        <td colspan="2"><small><em><strong>Cadastro atualizado em:</strong> {{ formata_data(pessoa.data_atualizacao) }}</em></small></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>IDP:</strong></small> {{ pessoa.id }}</td>
+                        <td colspan="2"><small><strong>Status:</strong></small> {{ pessoa.status.title() }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>Nome Civil:</strong></small><br>{{ pessoa.nome_civil }}</td>
+                        <td colspan="2"><small><strong>Nome Social:</strong></small><br>{{ pessoa.nome_social }}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><small><strong>Apelido:</strong></small><br>{{ pessoa.apelido }}</td>
+                        <td colspan="1"><small><strong>CPF:</strong></small><br>{{ mascara_cpf(pessoa.cpf) }}</td>
+                        <td><small><strong>Data de Nascimento:</strong></small><br>{{ formata_data_br(pessoa.data_nascimento) }} </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>E-mail:</strong></small><br>{{ pessoa.email }}</td>
+                        <td colspan="1"><small><strong>Telefone:</strong></small><br>{{ mascara_tel(pessoa.telefone) }}</td>
+                        <td><small><strong>Celular:</strong></small><br>{{ mascara_tel(pessoa.celular) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>Cidade Atual:</strong></small><br>{{ entidade_cad_dic['cidade'][pessoa.cidade_atual] }}</td>
+                        <td colspan="2"><small><strong>Entidade Referência:</strong></small><br>{{ entidade_cad_dic['entidade'][pessoa.entidade_referencia] }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><small><strong>Entidade Geradora:</strong></small><br>{{ entidade_cad_dic['entidade'][pessoa.entidade_geradora] }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"><small><strong>Raça/Etnia:</strong></small><br>{{ pessoa_cad_dic['etnia'][pessoa.etnia] }}</td>
+                        <td colspan="1"><small><strong>Sexo:</strong></small><br>{{ pessoa_cad_dic['sexo'][pessoa.sexo] }}</td>
+                        <td colspan="1"><small><strong>Orientação Sexual:</strong></small><br>{{ pessoa_cad_dic['orientacao_sexual'][pessoa.orientacao_sexual] }}</td>
+                        <td ><small><strong>Identidade de Gênero:</strong></small><br>{{ pessoa_cad_dic['identidade_genero'][pessoa.identidade_genero] }}</td>
+                    </tr>
+                    <tr>
+                        <td><small><strong>RG:</strong></small><br>{{ pessoa.rg + '-' + pessoa.rg_dv}}</td>
+                        <td><small><strong>UF:</strong></small><br>{{ pessoa.rg_uf.upper() }}</td>
+                        <td><small><strong>Data de Emissão:</strong></small><br>{{ formata_data_br(pessoa.rg_emissao) }}</td>
+                        <td><small><strong>Órgão Emissor:</strong></small><br>{{ pessoa.rg_orgao_emissor }}</td>
+                    </tr>
+                    <tr>
+                        <td><small><strong>Título de Eleitor:</strong></small><br>{{ mascara_doc(pessoa.titulo_eleitor, 4, 3) }}</td>
+                        <td><small><strong>Zona Eleitoral:</strong></small><br>{{ pessoa.titulo_zona }}</td>
+                        <td><small><strong>Seção:</strong></small><br>{{ pessoa.titulo_secao }}</td>
+                        <td><small><strong>Data de Emissão:</strong></small><br>{{ formata_data_br(pessoa.titulo_emissao) }}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td><small><strong>CNS:</strong></small><br>{{ mascara_doc(pessoa.cns, 3, 5) }}</td>
+                        <td><small><strong>NIS</strong></small><br>{{ mascara_doc(pessoa.nis, 4, 3) }}</td>
+                        <td colspan="2"><small><strong>Certidão de Nascimento:</strong></small><br>{{ mascara_doc(pessoa.certidao_nascimento, 4, 8) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>Naturalidade:</strong></small><br>{{ pessoa.naturalidade }}</td>
+                        <td colspan="2"><small><strong>Nacionalidade:</strong></small><br>{{ pessoa.nacionalidade }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><br><small><strong>DADOS CADASTRAIS - PESSOA ESTRANGEIRA</strong></small></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>RNM:</strong></small><br>{{ mascara_doc(pessoa.crnm_rnm, 5, 4) }}</td>
+                        <td colspan="1"><small><strong>Emissão:</strong></small><br>{{ formata_data_br(pessoa.crnm_emissao) }}</td>
+                        <td><small><strong>Validade:</strong></small><br>{{ formata_data_br(pessoa.crnm_validade) }} </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>Filiação A:</strong></small><br>{{ pessoa.crnm_filiacao_a }}</td>
+                        <td colspan="2"><small><strong>Filiação B:</strong></small><br>{{ pessoa.crnm_filiacao_b }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><small><strong>Classificação:</strong></small><br>{{ pessoa.crnm_classificacao }}</td>
+                        <td colspan="2"><small><strong>Domicílio (endereço):</strong></small><br>{{ pessoa.crnm_domicilio }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script src="../static/js/bootstrap.min.js" ></script>
+    <script type="text/javascript">
+        window.print();
+        var sBrowser, sUsrAg = navigator.userAgent
+        if(sUsrAg.indexOf("Chrome") > -1) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+            console.log('onbeforeprint equivalent');
+        } else {
+            window.location.href = "http://127.0.0.1:5000/cadastro_psr/{{ pessoa.id }}";
+            }
+        });
+        };
+        if (sUsrAg.indexOf("Firefox") > -1) {
+            window.onafterprint = window.location.href = "http://127.0.0.1:5000/cadastro_psr/{{ pessoa.id }}";
+        };
+    </script>
+</body>
+</html>

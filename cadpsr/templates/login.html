@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" media="screen">
+    <title>Login CadPSR+</title>
+    </head>
+    <body style="background-color: #c3c2c2;">
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+        {% for category, mensagem in mensagens %}
+        {% if category == 'error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <small>
+                <strong>
+                    <em>{{ mensagem }}</em>
+                </strong>
+            </small>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <small>
+                <strong>
+                    <em>{{ mensagem }}</em>
+                </strong>
+            </small>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <main class="vh-100">
+            <!-- Modelo de tela de Login baseado no modelo disponibilizado por Material Designfor Bootstrap -->
+            <!-- Modelo disponivel em: https://mdbootstrap.com/docs/standard/extended/login/#! -->
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                            <h1 class="mb-5"><strong>CadPSR+ | {{ cadpsr_versao }}</strong></h1>
+                            <form class="needs-validation" action="/login" method="POST" novalidate>
+                                <div class="form-outline mb-4 text-start position-relative">
+                                    <label class="form-label" for="email"><small><strong>E-mail</strong></small></label>
+                                    <input class="form-control form-control-lg" type="email"
+                                        name="email" id="email"
+                                        minlength="5" maxlength="60" required>
+                                    <div class="invalid-tooltip">
+                                        Informe um e-mail válido (até 60 caracteres).
+                                    </div>
+                                </div>
+                                <div class="form-outline mb-4 text-start position-relative">
+                                    <label class="form-label" for="senha"><small><strong>Senha</strong></small></label>
+                                    <input class="form-control form-control-lg" type="password"
+                                        name="senha" id="senha"
+                                        minlength="5" maxlength="64" required>
+                                    <div class="invalid-tooltip">
+                                        O campo Senha deve conter de 10 a 64 caracteres).
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-dark btn-lg btn-block" type="submit" id="entrar">Entrar</button>
+                                </div>
+                            </form>
+                            </div>
+                            <small class="text-center"><p><em>*Aplicação web desenvolvida para fins acadêmicos.</em></p></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+              <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="toast-header">
+                  <strong class="me-auto">Aviso</strong>
+
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Para prover a Sessão de Usuário coletamos os seguintes dados: <em>login e data-hora de acesso</em>.
+                </div>
+              </div>
+            </div>
+        </main>
+        <script src="../static/js/bootstrap.min.js" ></script>
+        <script type="text/javascript">
+            window.onload = (event) => {
+                var toastLiveExample = document.getElementById('liveToast')
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            }
+
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                              event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                  }, false)
+                })
+            })()
+        </script>
+    </body>
+</html>

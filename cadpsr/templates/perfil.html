@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-sm-11">
+            <h1>Perfil {{ colaborador.nome_social }}</h1>
+        </div>
+        {% if current_user.status == 'INICIO' or current_user.status == 'REDEF' %}
+        <div class="col-sm-1">
+
+        </div>
+        {% else %}
+        <div class="col-sm-1">
+            <a class="btn btn-outline-dark" href="/index" role="button">&nbsp;Voltar&nbsp</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <form class="needs-validation" action="#" method="POST" novalidate>
+        <div class="row">
+            <div class="col-sm-11">
+                <h2>{{ subtitulo }}</h2>
+            </div>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-outline-success" id="salvar"
+                    name="Salvar" value="">&nbsp;Salvar&nbsp;</button>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col-sm-5 position-relative">
+                <label for="senha_atual">Senha Atual</label>
+                <input class="form-control" type="password"
+                    name="senha_atual"  id="senha_atual"
+                    minlength="5" maxlength="64"
+                    placeholder="Informe sua senha atual" required>
+                <div class="invalid-tooltip">
+                    Informe sua senha atual (até 64 caracteres).
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-5 position-relative">
+                <label for="senha_nova">Nova senha <em>(deve conter no mínimo 10 dígitos)</em></label>
+                <input class="form-control" type="password"
+                    name="senha_nova" id="senha_nova"
+                    minlength="10" maxlength="64"
+                    placeholder="Digite a nova senha" required>
+                <div class="invalid-tooltip">
+                    A nova senha deve ser diferente de sua senha atual e deve conter de 10 até 64 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-5 position-relative">
+                <label for="senha_confirmacao">Confirmação de senha</label>
+                <input class="form-control" type="password"
+                    name="senha_confirmacao" id="senha_confirmacao"
+                    minlength="10" maxlength="64"
+                    placeholder="Confirme a nova senha" required>
+                <div class="invalid-tooltip">
+                    Informe novamente sua nova senha.
+                </div>
+            </div>
+        </div>
+    </form>
+<br>
+<br>
+</main>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                      event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+</script>
+{% endblock %}

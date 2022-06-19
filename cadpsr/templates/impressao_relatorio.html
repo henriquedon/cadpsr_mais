@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" >
+
+    <title>{{ titulo }}</title>
+</head>
+<body>
+    <main>
+    {% set pagina = 1 %}
+    {% if paginas == 1 %}
+        <section>
+            <h1><strong>CadPSR+</strong></h1>
+            <small><strong>RELATÓRIO DE ATENDIMENTOS</strong></small>
+            <br>
+            <small><strong>REFERÊNCIA DIA:</strong> {{ data_relatorio }}</small>
+            <br>
+            <div class="row">
+                <div class=col-sm-10>
+                    <small><strong>{{ entidade_cad_dic['entidade'][entidade_nome].upper() }}</strong></small>
+                </div>
+                <div class="col-sm-2 text-end">
+                    <small><strong>PAG {{ pagina }}/{{ paginas }}</strong></small>
+                </div>
+            </div>
+            <hr>
+            <p>
+                <strong>PESSOAS ATENDIDAS:</strong> {{ qtd_pessoas }}
+                <br>
+                <strong>Nº DE ATENDIMENTOS REALIZADOS:</strong> {{ qtd_atendimentos }}
+                <br>
+            </p>
+            <table class="table table-striped" align="center">
+                <thead>
+                    <tr>
+                        <th style="width: 3%"><small>#</small></th>
+                        <th style="width: 3%"><small>IDA</small></th>
+                        <th style="width: 25%"><small>PESSOA</small></th>
+                        <th style="width: 25%"><small>TIPO ATENDIMENTO</small></th>
+                        <th style="width: 25%"><small>COLABORADOR(A)</small></th>
+                        <th style="width: 8%"><small>DATA-HORA</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for atendimento in atendimentos %}
+                    <tr>
+                        <th scope="row"><small>{{ loop.index }}</small></th>
+                        <td>{{ atendimento.id }}</td>
+                        <td>{{ atendimento.nome_pessoa }}
+                        <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                        <td>{{ atendimento.nome_colaborador }}</td>
+                        <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    {% else %}
+    <section>
+        <h1><strong>CadPSR+</strong></h1>
+        <small><strong>RELATÓRIO DE ATENDIMENTOS</strong></small>
+        <br>
+        <small><strong>REFERÊNCIA DIA:</strong> {{ data_relatorio }}</small>
+        <br>
+        <div class="row">
+            <div class=col-sm-10>
+                <small><strong>{{ entidade_cad_dic['entidade'][entidade_nome].upper() }}</strong></small>
+            </div>
+            <div class="col-sm-2 text-end">
+                <small><strong>PAG {{ pagina }}/{{ paginas }}</strong></small>
+            </div>
+        </div>
+        <hr>
+        <p>
+            <strong>PESSOAS ATENDIDAS:</strong> {{ qtd_pessoas }}
+            <br>
+            <strong>Nº DE ATENDIMENTOS REALIZADOS:</strong> {{ qtd_atendimentos }}
+            <br>
+        </p>
+        <table class="table table-striped" align="center">
+            <thead>
+                <tr>
+                    <th style="width: 3%"><small>#</small></th>
+                    <th style="width: 3%"><small>IDA</small></th>
+                    <th style="width: 25%"><small>PESSOA</small></th>
+                    <th style="width: 25%"><small>TIPO ATENDIMENTO</small></th>
+                    <th style="width: 25%"><small>COLABORADOR(A)</small></th>
+                    <th style="width: 8%"><small>DATA-HORA</small></th>
+                </tr>
+            </thead>
+            <tbody>
+    {% for atendimento in atendimentos %}
+                <tr>
+                    <th scope="row"><small>{{ loop.index }}</small></th>
+                    <td>{{ atendimento.id }}</td>
+                    <td>{{ atendimento.nome_pessoa }}
+                    <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                    <td>{{ atendimento.nome_colaborador }}</td>
+                    <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                </tr>
+    {% if loop.index % 11 == 0%}
+    {% if loop.index == qtd_atendimentos %}
+    {% else %}
+            </tbody>
+        </table>
+    </section>
+    <br>
+    <br>
+    {% set pagina =  (loop.index + 11) // 11 %}
+
+    <section>
+        <h1><strong>CadPSR+</strong></h1>
+        <small><strong>RELATÓRIO DE ATENDIMENTOS</strong></small>
+        <br>
+        <small><strong>REFERÊNCIA DIA:</strong> {{ data_relatorio }}</small>
+        <br>
+        <div class="row">
+            <div class=col-sm-10>
+                <small><strong>{{ entidade_cad_dic['entidade'][entidade_nome].upper() }}</strong></small>
+            </div>
+            <div class="col-sm-2 text-end">
+                <small><strong>Pag {{ pagina }}/{{ paginas }}</strong></small>
+            </div>
+        </div>
+        <hr>
+        <p>
+            <strong>PESSOAS ATENDIDAS:</strong> {{ qtd_pessoas }}
+            <br>
+            <strong>Nº DE ATENDIMENTOS REALIZADOS:</strong> {{ qtd_atendimentos }}
+            <br>
+        </p>
+        <table class="table table-striped" align="center">
+            <thead>
+                <tr>
+                    <th style="width: 3%"><small>#</small></th>
+                    <th style="width: 3%"><small>IDA</small></th>
+                    <th style="width: 25%"><small>PESSOA</small></th>
+                    <th style="width: 25%"><small>TIPO ATENDIMENTO</small></th>
+                    <th style="width: 25%"><small>COLABORADOR(A)</small></th>
+                    <th style="width: 8%"><small>DATA-HORA</small></th>
+                </tr>
+            </thead>
+            <tbody>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+            </thead>
+        <tbody>
+    </table>
+    {% endif %}
+    </main>
+
+    <div class="fixed-bottom bg-white" align='center'>
+          <footer>
+              <small><em>Disciplina de Projeto Integrador II - Grupo 34 - UNIVESP - 1º Semestre de 2022</em></small>
+          </footer>
+    </div>
+    <script src="../static/js/bootstrap.min.js" ></script>
+
+    <script type="text/javascript">
+        window.print();
+        var sBrowser, sUsrAg = navigator.userAgent
+        if(sUsrAg.indexOf("Chrome") > -1) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+            console.log('onbeforeprint equivalent');
+        } else {
+            window.location.href = "http://127.0.0.1:5000/atendimentos";
+            }
+        });
+        };
+        if (sUsrAg.indexOf("Firefox") > -1) {
+            window.onafterprint = window.location.href = "http://127.0.0.1:5000/atendimentos";
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container">
+    <section>
+    <div class="row">
+        <div class="col-sm-9">
+            <h1>Atendimento</h1>
+        </div>
+        {% if busca == None %}
+        {% else %}
+        <div class="col-sm-3 text-end">
+            <!-- Link de Gatilho para Modal -->
+            <a class="btn btn-outline-primary" align="text-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar Atendimento</a>
+        </div>
+        <!-- Modal -->
+        <form class="" action="/persistencia_atendimento" method="POST">
+        <div class="modal" id="staticBackdrop" data-bs-backdrop="static"
+            data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="staticBackdropLabel">Registro de Atendimento</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2><strong>{{ pessoa_nome.upper() }}</strong></h2>
+
+                        <small><strong>IDP:</strong> {{ pessoa_id }}</small>
+                        <br>
+                        <small><strong>CPF:</strong> {{ pessoa_cpf }}</small>
+                        <br>
+                        <small><strong>ENTIDADE REFERÊNCIA:</strong> {{ entidade_cad_dic['entidade'][pessoa_entidade_geradora] }}</small>
+
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="tipo_atendimento"><em>Selecione o Tipo de Atendimento</em></label>
+                                <select class="form-select" name="tipo_atendimento" id="tipo_atendimento" required>
+                                    <option value="" selected></option>
+                                    {% for chave_tipo_atendimento in atendimento_cad_dic['tipo_atendimento'] %}
+                                    {% if chave_tipo_atendimento in '12' %}
+                                    {% else %}
+                                    <option value="{{ chave_tipo_atendimento }}">
+                                        {{ atendimento_cad_dic['tipo_atendimento'][chave_tipo_atendimento] }}
+                                    </option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="obs_atendimento"><em>Observação - Atendimento (Máximo 500 caracteres)</em></label>
+                                <textarea class="form-control" id="obs_atendimento" name="obs_atendimento"
+                                    rows="4" maxlength="500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success" name="registrar" value="{{ pessoa_id }}">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <small>
+                <strong><em>Para registrar o atendimento consulte por IDP ou por IDA.</em></strong>
+            </small>
+        </div>
+
+        <div class="col-sm-4 text-end">
+            <!-- Link de Gatilho para Modal Relatório Dia -->
+            <small> | <a href="#relatorio_dia_modal" data-bs-toggle="modal" data-bs-target="#relatorio_dia_modal">Relatório Dia</a></small>
+
+            <small> | <a href="#relatorio_data_modal" data-bs-toggle="modal" data-bs-target="#relatorio_data_modal">Relatório Data Específica</a> |</small>
+        </div>
+        <!-- Modal Relatório Dia -->
+        <form name="form_relatorio_dia" id="form_relatorio_dia"
+            class="" action="/relatorio" method="POST">
+            <div class="modal" id="relatorio_dia_modal" data-bs-backdrop="static"
+                data-bs-keyboard="true" tabindex="-1" aria-labelledby="relatorio_dia_modal_titulo" aria-hidden="true">
+                <div class="modal-dialog modal-md position-relative">
+                    <div class="modal-content position-relative">
+                        <div class="modal-header position-relative">
+                            <h1 class="modal-title" id="relatorio_dia_modal_titulo">Geração de Relatório</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h2>Relatório Dia</h2>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>Data do Relatório a ser gerado: {{ data_relatorio }}.</p>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p><em><strong>Obs.:</strong> na página seguinte, selecione a <strong>Impressora</strong> ou <strong>Salvar como PDF</strong>. O término ou cancelamento da operação fará que o sistema te redirecione para página Atendimentos.</em></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
+                            <button name="gerar_relatorio_dia" id="gerar_relatorio_dia"
+                                type="submit" class="btn btn-success" value="relatorio_dia">Gerar Relatório</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Modal Relatório Data Específica -->
+        <form class="needs-validation" name="form_relatorio_data" id="form_relatorio_data"
+            class="" action="/relatorio" method="POST" novalidate>
+            <div class="modal" id="relatorio_data_modal" data-bs-backdrop="static"
+                data-bs-keyboard="true" tabindex="-1" aria-labelledby="relatorio_data_modal_titulo" aria-hidden="true">
+                <div class="modal-dialog modal-md position-relative">
+                    <div class="modal-content position-relative">
+                        <div class="modal-header position-relative">
+                            <h1 class="modal-title" id="relatorio_data_modal_titulo">Geração de Relatório</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h2>Relatório Data Específica</h2>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-5 position-relative">
+                                    <label for="data_relatorio"><em>Informe a data:</em></label>
+                                    <input class="form-control" name="data_relatorio"
+                                        id="data_relatorio" type="date" required>
+                                    <div class="invalid-tooltip">
+                                        Informe a data do relatório a ser gerado.
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p><em><strong>Obs.:</strong> na página seguinte, selecione a <strong>Impressora</strong> ou <strong>Salvar como PDF</strong>. O término ou cancelamento da operação fará que o sistema te redirecione para página Atendimentos.</em></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
+                            <button name="gerar_relatorio" id="gerar_relatorio" type="submit" class="btn btn-success">Gerar Relatório</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <br>
+
+    <h2><em>Consulta & Registro de Atendimento</em></h2>
+
+    <br>
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="tipo_consulta"> Tipo de Consulta:</label>
+                <select class="form-select" name="tipo_consulta" id="tipo_consulta"
+                    aria-label="Seleção de tipo de consulta por ID da Pessoa ou por ID de Atendimento">
+                    <option value="id_pessoa" selected>Pessoa (IDP)</option>
+                    <option value="id_atendimento">Atendimento (IDA)</option>
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <label for="dado_consultado">
+                    Informe o IDA ou IDP correspondente ao Tipo de Consulta:
+                </label>
+                <input type="search" class="form-control"
+                    id="dado_consultado" name="dado_consultado"
+                    placeholder="Informe o IDA ou IDP a ser consultado" autofocus>
+            </div>
+            <div class="col-sm-1">
+                <div class="row">
+                    &nbsp;
+                </div>
+                <button type="submit" class="btn btn-outline-dark" aria-label="Botão para efetuar a consulta">Consultar</button>
+            </div>
+        </div>
+    </form>
+    {% if busca == True%}
+    <!-- SE TIPO DE PESQUISA == PESSOA ID -->
+    <!-- CONSULTA POR #PESSOA -->
+        {% if tipo_consulta == 'id_pessoa' %}
+        <br>
+        <table class="table table-striped" align="center">
+            <thead>
+                <tr>
+                    <th style="width: 5%">ID</th>
+                    <th style="width: 30%">NOME</th>
+                    <th style="width: 14%">CPF</th>
+                    <th style="width: 11%">CADASTRO</th>
+                    <th style="width: 18%">CONSULTA CADPSR+</th>
+                    <th style="width: 22%">CONSULTA ENTIDADE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <form class="" method="POST">
+                        <td>{{ pessoa_id }}</td>
+                        <td>{{ pessoa_nome }}</td>
+                        <td>{{ pessoa_cpf }}</td>
+                        <td><a class="link-primary" href="/cadastro_psr/{{ pessoa_id }}">Pessoa</a></td>
+                        <td><a class="link-primary" href="/atendimentos_cadpsr/{{ pessoa_id }}">Todos Atendimentos</a></td>
+                        <td><a class="link-primary" href="/atendimentos_entidade/{{ pessoa_id }}">Atendimentos nessa Entidade</a></td>
+                    </form>
+                </tr>
+        </tbody>
+        </table>
+        {% else %}
+        <br>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <p><strong>PESSOA:</strong> {{ pessoa_nome.upper() }}</p>
+            </div>
+            <div class="col-sm-5">
+                <p><strong>ID:</strong> {{ pessoa_id }}</p>
+            </div>
+            <div class="col-sm-2">
+                <p><strong>CPF:</strong> {{ pessoa_cpf }}</p>
+            </div>
+        </div>
+
+        <br>
+
+        <table class="table table-striped" align="center">
+            <thead>
+                <tr>
+                    <th style="width: 10%">IDA</th>
+                    <th style="width: 30%">TIPO DE ATENDIMENTO</th>
+                    <th style="width: 30%">ENTIDADE</th>
+                    <th style="width: 10%">INICIATIVA</th>
+                    <th style="width: 20%">DATA/HORA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <form class="" method="POST">
+                        <td><a class="link-primary" href="#" data-bs-toggle="modal" data-bs-target="#cod_atendimento_modal">{{ atendimento.id }}</a></td>
+                        <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                        <td>{{ entidade_cad_dic['entidade'][atendimento.entidade_geradora] }}</td>
+                        <td>{{ entidade_cad_dic['iniciativa'][entidade_iniciativa] }}</td>
+                        <td>{{ data_atendimento }}</td>
+                    </form>
+                </tr>
+        </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal" id="cod_atendimento_modal" data-bs-backdrop="static"
+            data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="cod_atendimento_titulo"><strong>ATENDIMENTO</strong>: {{ atendimento.id }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h1><strong>{{ pessoa_nome.upper() }}</strong></h1>
+                        <small><strong>ID: </strong>{{ pessoa_id }}</small>
+                        <br>
+                        <small><strong>CPF: </strong>{{ pessoa_cpf }}</small>
+                        <br>
+                        <small><strong>ENTIDADE REFERÊNCIA: </strong>{{ entidade_cad_dic['entidade'][atendimento.entidade_geradora] }}</small>
+
+                        <br>
+                        <br>
+
+                        <table class="table" align="center">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%">TIPO DE ATENDIMENTO</th>
+                                    <th style="width: 40%">ENTIDADE</th>
+                                    <th style="width: 20%">DATA-HORA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> {{ atendimento_cad_dic['tipo_atendimento'][ atendimento.tipo_atendimento] }} </td>
+                                    <td> {{ entidade_cad_dic['entidade'][atendimento.entidade_geradora] }}</td>
+                                    <td>{{ data_atendimento }}</td>
+                                </tr>
+                        </tbody>
+                        </table>
+
+                        <br>
+
+                        <label for="cod_obs_registrada"><em><strong>Observação Atendimento:</strong></em></label>
+                        <textarea class="form-control" id="cod_obs_registrada" name="cod_obs_registrada"
+                            rows="4" maxlength="500" value="" disabled>{{ atendimento.obs_atendimento }}</textarea>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
+    <!-- FIM DA CONDIÇÃO -->
+<br>
+</section>
+</main>
+<script src="../static/js/jquery-3.6.0.min.js" ></script>
+<script src="../static/js/jquery.mask.min.js" ></script>
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                      event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+          }, false)
+        })
+})()
+</script>
+{% endblock %}

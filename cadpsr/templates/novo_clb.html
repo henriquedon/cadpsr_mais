@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="container">
+        <div class="row">
+            <div class="col-sm-11">
+                <h1>{{ titulo_body_2 }}</h1>
+            </div>
+            <div class="col-sm-1 text-end">
+                <a class="btn btn-outline-dark" href="/colaboradores"
+                    role="button">&nbsp;Voltar&nbsp</a>
+            </div>
+        </div>
+
+    <hr>
+
+    <form class="needs-validation" id="novo_colaborador" name="novo_colaborador"
+        action="/persistencia_clb" method="POST" novalidate>
+        <div class="row">
+            <div class="col-sm-11">
+            </div>
+            <div class="col-sm-1 -text-end">
+                <button type="submit" class="btn btn-outline-success"
+                    id="salvar" name="salvar"  value="">&nbsp;Salvar&nbsp</button>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="nome_civil">Nome Civil</label>
+                <input type="text" class="form-control"
+                    id="nome_civil" name="nome_civil"
+                    minlength="3" maxlength="60"
+                    placeholder="Informe o nome civil" required>
+                <div class="invalid-tooltip">
+                    Informe o nome civil (3 até 60 caracteres).
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="nome_social">Nome Social</label>
+                <input type="text" class="form-control"
+                    id="nome_social" name="nome_social"
+                    minlength="3" maxlength="60"
+                    placeholder="Informe o nome social">
+                <div class="invalid-tooltip">
+                    O campo nome social deve conter de 3 até 60 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 position-relative">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control"
+                    name="email" id="email" maxlength="60"
+                    placeholder="Informe o e-mail" required>
+                <div class="invalid-tooltip">
+                    Informe um e-mail válido (até 60 caracteres).
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="cpf">CPF</label>
+                <input type="text" class="form-control"
+                    name="cpf" id="cpf"
+                    minlength="11" maxlength="11"
+                    onkeypress="$(this).mask('000.000.000-00')"
+                    placeholder="000.000.000-00" required>
+                <div class="invalid-tooltip">
+                    Informe o CPF (11 dígitos).
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="data_nascimento">Data de Nascimento</label>
+                <input class="form-control" type="date" required
+                    name="data_nascimento" id="data_nascimento"
+                    min="1921-01-01" max="2022-06-15">
+                <div class="invalid-tooltip">
+                    Informe a data de nascimento.
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-3 position-relative">
+                <label for="iniciativa">Iniciativa</label>
+                <select class="form-select" name="iniciativa" id="iniciativa"
+                    required>
+                    <option selected></option>
+                    <option value="1">{{ colaborador_cad_dic['iniciativa']['1'] }}</option>
+                    <option value="2">{{ colaborador_cad_dic['iniciativa']['2'] }}</option>
+                </select>
+                <div class="invalid-tooltip">
+                    Informe a iniciativa referente ao(à) Colaborador(a).
+                </div>
+            </div>
+            <div class="col-sm-3 position-relative">
+                <label for="tipo_clb">Tipo</label>
+                <select class="form-select" name="tipo_clb" id="tipo_clb"
+                    required>
+                    {% if current_user.tipo_clb == '4' %}
+                    <option value="5" selected>Colaborador(a)</option>
+                    {% else %}
+                    <option selected></option>
+                    <option value="5">{{ colaborador_cad_dic['tipo']['5'] }}</option>
+                    <option value="4">{{ colaborador_cad_dic['tipo']['4'] }}</option>
+                    {% endif %}
+                </select>
+                <div class="invalid-tooltip">
+                    Informe o tipo de Colaborador(a).
+                </div>
+            </div>
+            <div class="col-sm-6 position-relative">
+                <label for="lotacao">Entidade</label>
+                <select class="form-select" name="lotacao" id="lotacao" required>
+                    {% if current_user.tipo_clb == '4' %}
+                    <option value="{{ current_user.lotacao }}" selected>
+                        {{ entidade_cad_dic['entidade'][current_user.lotacao] }}
+                    </option>
+                    {% else %}
+                    <option selected></option>
+                    {% for chave_entidade in entidade_cad_dic['entidade'] %}
+                    {% if chave_entidade != '0' %}
+                    <option value="{{ chave_entidade }}">
+                        {{ entidade_cad_dic['entidade'][chave_entidade] }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </select>
+                <div class="invalid-tooltip">
+                    Informe a Entidade do(a) Colaborador(a).
+                </div>
+            </div>
+        </div>
+        <br>
+    </form>
+</main>
+<script src="../static/js/jquery-3.6.0.min.js" ></script>
+<script src="../static/js/jquery.mask.min.js" ></script>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                      event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+</script>
+{% endblock %}

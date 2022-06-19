@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-sm-10">
+            <h1>Colaboradores</h1>
+        </div>
+        <div class="col-sm-2 text-end">
+            <a class="btn btn-outline-primary" href="/novo_clb" role="button">Novo Cadastro</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-9">
+            <small>
+                <em><strong>Cadastrados nesta entidade:</strong> {{ total_colaboradores_entidade }}</em>
+            </small>
+        </div>
+        {% if current_user.tipo_clb == '0' %}
+        <div class="col-sm-3">
+            <small>
+                <em><strong>Cadastrados no CadPSR+:</strong> {{ total_colaboradores_cadpsr }}</em>
+            </small>
+        </div>
+        {% endif %}
+    </div>
+
+    <br>
+
+    <h2><em>Consulta de Colaboradores</em></h2>
+
+    <br>
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="tipo_de_consulta"> Tipo de Consulta:</label>
+                <select class="form-select" name="tipo_de_consulta" id="tipo_de_consulta">
+                    <option value="IDC" select>IDC</option>
+                    <option value="NOME">NOME</option>
+                    <option value="CPF">CPF</option>
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <label for="dado_consultado">Informe o dado correspondente ao tipo de consulta desejada:</label>
+                <input type="search" class="form-control"
+                    id="dado_consultado" name="dado_consultado"
+                    placeholder="Informe o dado a ser consultado..." autofocus>
+            </div>
+            <div class="col-sm-1">
+                <div class="row">
+                    &nbsp;
+                </div>
+                <button type="submit" class="btn btn-outline-dark"
+                    aria-label="Botão para efetuar a consulta">Consultar</button>
+            </div>
+        </div>
+    </form>
+
+    <br>
+
+    {% if current_user.tipo_clb == '0' %}
+    <small>
+        <strong>ATALHOS DE CONSULTA:</strong><br>
+        <em>
+            <strong>.t</strong> para todos Colaboradores cadastrados no CadPSR+;
+            <br>
+            <strong>.acesso</strong> para registro de acesso de todos Colaboradores do CadPSR+;
+        </em>
+    </small>
+    {% else %}
+    <small>
+        <strong>ATALHO DE CONSULTA:</strong><br>
+        <em>
+            <strong>.t</strong> para todos Colaboradores cadastrados no CadPSR+;
+        </em>
+    </small>
+    {% endif %}
+
+    <br>
+    <br>
+
+    <div>
+    {% if busca == True %}
+    {% if acessos %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 5%">#</th>
+                <th style="width: 5%">IDC</th>
+                <th style="width: 9%">STATUS</th>
+                <th style="width: 23%">NOME</th>
+                <th style="width: 25%">ENTIDADE</th>
+                <th style="width: 15%">DATA-HORA</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for acesso in acessos %}
+        <tr>
+        <th scope="row">{{ loop.index }}</th>
+            <form class="" method="POST">
+                <td>{{ acesso.id_clb }}</td>
+                <td>{{ acesso.status_clb }}</td>
+                <td>{{ acesso.nome_clb }}</td>
+                <td>{{ entidade_cad_dic['entidade'][acesso.lotacao_clb] }}</td>
+                <td>{{ formata_data(acesso.data_hora) }}</td>
+            </form>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 4%">#</th>
+                <th style="width: 7%">STATUS</th>
+                <th style="width: 6%">IDC</th>
+                <th style="width: 26%">NOME</th>
+                <th style="width: 15%">TIPO</th>
+                <th style="width: 40%">ENTIDADE</th>
+                <th style="width: 3%">VISUALIZAR</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if colaborador %}
+        <tr>
+        <th scope="row"></th>
+            <form class="" method="POST">
+                <td>{{ colaborador.status }}</td>
+                <td>{{ colaborador.id }}</td>
+                <td>{{ colaborador.nome_civil }}</td>
+                <td>{{ colaborador_cad_dic['tipo'][colaborador.tipo_clb] }}</td>
+                <td>{{ entidade_cad_dic['entidade'][colaborador.lotacao] }}</td>
+                <td>
+                    <a class="btn btn-link" href="/cadastro_clb/{{ colaborador.id }}"
+                        role="button">Abrir</a>
+                </td>
+            </form>
+        </tr>
+        {% else %}
+        {% for colaborador in colaboradores %}
+            <tr>
+            <th scope="row">{{ loop.index }}</th>
+                <form class="" method="POST">
+                    <td>{{ colaborador.status }}</td>
+                    <td>{{ colaborador.id }}</td>
+                    <td>{{ colaborador.nome_civil }}</td>
+                    <td>{{ colaborador_cad_dic['tipo'][colaborador.tipo_clb] }}</td>
+                    <td>{{ entidade_cad_dic['entidade'][colaborador.lotacao] }}</td>
+                    <td>
+                        <a class="btn btn-link" href="/cadastro_clb/{{ colaborador.id }}"
+                            role="button">Abrir</a>
+                    </td>
+                </form>
+            </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+    </table>
+    {% endif %}
+    {% endif %}
+    </div>
+<br>
+</main>
+{% endblock %}

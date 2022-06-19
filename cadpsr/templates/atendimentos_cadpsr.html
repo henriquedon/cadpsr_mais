@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container">
+    <section>
+    <div class="row">
+        <div class="col-sm-11">
+            <h1>{{ heading }}</h1>
+        </div>
+        <div class="col-sm-1">
+            <a class="btn btn-outline-dark" href="/atendimentos"
+                role="button">Voltar</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-11">
+            <h2><strong>{{ pessoa_nome.upper() }}</strong></h2>
+        </div>
+
+        {% if titulo == 'Histórico Atendimentos Entidade - CadPSR+' %}
+        {% if atendimentos %}
+        <div class="col-sm-1">
+            <p><a href='#'>Relatório</a></p>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+
+    <small><strong>IDP:</strong> {{ pessoa_id }}</small>
+    <br>
+    <small><strong>CPF:</strong> {{ pessoa_cpf }}</small>
+    <br>
+    <small><strong>ENTIDADE REFERÊNCIA:</strong> {{ entidade_cad_dic['entidade'][pessoa_entidade_referencia] }}</small>
+
+    <br>
+    <br>
+    {% if titulo == 'Histórico Todos Atendimentos - CadPSR+' %}
+    <!-- TODOS ATENDIMENTOS ECOSSISTEMA CADPSR+  -->
+    <table class="table table-striped" align="center">
+        <thead>
+            <tr>
+                <th style="width: 4%">#</th>
+                <th style="width: 8%">IDA</th>
+                <th style="width: 35%">TIPO ATENDIMENTO</th>
+                <th style="width: 35%">ENTIDADE</th>
+                <th style="width: 18%">DATA-HORA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atendimento in atendimentos %}
+            <tr>
+                <form class="" method="POST">
+                    <th scope="row">{{ loop.index }}</th>
+                    <td><a class="link-primary" href="#" data-bs-toggle="modal" data-bs-target="#atendimento_modal_{{ atendimento.id }}">{{ atendimento.id }}</a></td>
+
+                    <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                    <td>{{ entidade_cad_dic['entidade'][atendimento.entidade_geradora] }}</td>
+                    <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% for atendimento in atendimentos %}
+    <!-- Modal -->
+    <div class="modal" id="atendimento_modal_{{ atendimento.id }}" data-bs-backdrop="static"
+        data-bs-keyboard="true" tabindex="-1" aria-labelledby="atendimento_modal_{{ atendimento.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="atendimento_modal_{{ atendimento.id }}"><strong>ATENDIMENTO</strong>: {{ atendimento.id }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h1><strong>{{ pessoa_nome.upper() }}</strong></h1>
+
+                    <small><strong>IDP:</strong> {{ pessoa_id }}</small>
+                    <br>
+                    <small><strong>CPF:</strong> {{ pessoa_cpf }}</small>
+                    <br>
+                    <small><strong>ENTIDADE REFERÊNCIA:</strong> {{ entidade_cad_dic['entidade'][pessoa_entidade_referencia] }}</small>
+
+                    <br>
+                    <br>
+
+                    <table class="table" align="center">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">TIPO DE ATENDIMENTO</th>
+                                <th style="width: 40%">ENTIDADE</th>
+                                <th style="width: 20%">DATA-HORA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                                <td>{{ entidade_cad_dic['entidade'][atendimento.entidade_geradora] }}</td>
+                                <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                            </tr>
+                    </tbody>
+                    </table>
+                    <br>
+                    <label for="obs_atendimento_{{ atendimento.id }}"><em><strong>Observação Atendimento:</strong></em></label>
+                    <textarea class="form-control" id="obs_atendimento_{{ atendimento.id }}" name="obs_atendimento_{{ atendimento.id }}"
+                        rows="4" maxlength="500" value="O " disabled>{{ atendimento.obs_atendimento }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!-- ATENDIMENTO DA ENTIDADE  -->
+    {% else %}
+    {% if atendimentos | count == 0%}
+    <br>
+    <p><strong>ATENÇÃO:</strong> Não foram encontrados registros de atendimentos para <strong>{{ pessoa_nome.upper() }}</strong> nessa Entidade.</p>
+    {% else %}
+    <table class="table table-striped" align="center">
+        <thead>
+            <tr>
+                <th style="width: 4%">#</th>
+                <th style="width: 8%">IDA</th>
+                <th style="width: 35%">TIPO ATENDIMENTO</th>
+                <th style="width: 35%">COLABORADOR(A)</th>
+                <th style="width: 18%">DATA-HORA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atendimento in atendimentos %}
+            <tr>
+                <form class="" method="POST">
+                    <th scope="row">{{ loop.index }}</th>
+                    <td><a class="link-primary" href="#" data-bs-toggle="modal" data-bs-target="#atendimento_modal_{{ atendimento.id }}">{{ atendimento.id }}</a></td>
+
+                    <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                    <td>{{ atendimento.nome_colaborador }}</td>
+                    <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% for atendimento in atendimentos %}
+    <!-- Modal -->
+    <div class="modal" id="atendimento_modal_{{ atendimento.id }}" data-bs-backdrop="static"
+        data-bs-keyboard="true" tabindex="-1" aria-labelledby="atendimento_modal_{{ atendimento.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="atendimento_modal_{{ atendimento.id }}"><strong>ATENDIMENTO</strong>: {{ atendimento.id }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h1><strong>{{ pessoa_nome.upper() }}</strong></h1>
+
+                    <small><strong>IDP:</strong> {{ pessoa_id }}</small>
+                    <br>
+                    <small><strong>CPF:</strong> {{ pessoa_cpf }}</small>
+                    <br>
+                    <small><strong>ENTIDADE REFERÊNCIA:</strong> {{ entidade_cad_dic['entidade'][pessoa_entidade_referencia] }}</small>
+
+                    <br>
+                    <br>
+
+                    <table class="table" align="center">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">TIPO DE ATENDIMENTO</th>
+                                <th style="width: 40%">COLABORADOR(A)</th>
+                                <th style="width: 20%">DATA-HORA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ atendimento_cad_dic['tipo_atendimento'][atendimento.tipo_atendimento] }}</td>
+                                <td>{{ atendimento.nome_colaborador }}</td>
+                                <td>{{ formata_data(atendimento.data_atendimento) }}</td>
+                            </tr>
+                    </tbody>
+                    </table>
+                    <br>
+                    <label for="obs_atendimento_{{ atendimento.id }}"><em><strong>Observação Atendimento:</strong></em></label>
+                    <textarea class="form-control" id="obs_atendimento_{{ atendimento.id }}" name="obs_atendimento_{{ atendimento.id }}"
+                        rows="4" maxlength="500" value="O " disabled>{{ atendimento.obs_atendimento }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" aria-label="Close">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+
+<br>
+</section>
+</main>
+{% endblock %}
