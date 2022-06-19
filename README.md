@@ -11,7 +11,7 @@ Prova de conceito desenvolvida com a finalidade de simular a integração do Cad
 
 - Na página de login, o formulário contendo usuário, senha e botão de enviar baseia-se no modelo disponibilizado por Material Design for Bootstrap. Disponível em: https://mdbootstrap.com/docs/standard/extended/login/#!
 
-- Na página index é utiliza uma fotografia de autori de Clay Banks (@claybanks - Unsplash), disponível em: https://unsplash.com/photos/LjqARJaJotc
+- Na página index é utiliza uma fotografia de autoria de Clay Banks (@claybanks - Unsplash), disponível em: https://unsplash.com/photos/LjqARJaJotc
 
 
 ## Tecnologias Utilizadas
