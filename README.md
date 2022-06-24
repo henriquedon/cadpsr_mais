@@ -1,4 +1,4 @@
-# CadPSR+
+# CadPSR+ | Versão Final (ver. 1.1.1)
 
 ## Sobre
 
