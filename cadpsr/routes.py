@@ -23,7 +23,7 @@ from cadpsr.funcoes import (formata_data, formata_data_br, lista_para_str,
 from cadpsr.models import Acesso, Atendimento, Colaborador, Pessoa, Entidade
 
 
-cadpsr_versao = 'Versão 1.1.0'
+cadpsr_versao = 'Versão 1.1.1'
 
 
 @app.before_request
